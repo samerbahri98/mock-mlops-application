@@ -1,2 +1,2 @@
-# mock-mlops-application
-mock mlops application for k8s ci purposes
+# Mock MLOps Application
+mock MLOps application for k8s ci purposes
