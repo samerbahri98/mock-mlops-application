@@ -1,0 +1,13 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: traning
+spec:
+  template:
+    spec:
+      containers:
+        - name: traning
+          image: ghcr.io/samerbahri98/mock-mlops-application-training:main
+      restartPolicy: Never
+  backoffLimit: 4
