@@ -1,25 +1,36 @@
 include .env
 export
 
-default:
-	make up
+default: .up
 
-.PHONY: kind-up
-kind-up:
+.kind-up:
 	sh ./scripts/kind_up.sh
 
-.PHONY: kind-download
-kind-download:
+.kind-download:
 	sh ./scripts/download_kind.sh
 
-.PHONY: kind-down
-kind-down:
+.kind-down:
 	sh ./scripts/kind_down.sh
 
+.docker-up:
+	docker compose up
+
+.docker-upd:
+	docker compose up -d
+
+.docker-down:
+	docker compose down -v
+
+
+
+.up: .kind-download .kind-up .docker-up
+
 .PHONY: up
-up:
-	make kind-download && make kind-up && docker compose up
+up: .up
 
 .PHONY: down
-down:
-	make kind-down && docker compose down -v
+down: .kind-down .docker-down
+
+.PHONY: client
+client:
+	docker exec -it k8s-client sh

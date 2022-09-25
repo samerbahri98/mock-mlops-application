@@ -13,7 +13,7 @@ running_containers = client.containers.list(filters=filters)
 print("====START REGISTRY====")
 
 if len(running_containers) == 0:
-    client.containers.run(image="registry:2",name="kind-registry",ports={5000:5001},restart_policy={"Name":"always"},detach=True)
+    client.containers.run(image="registry:2",name="kind-registry",ports={5000:5001},restart_policy={"Name":"always"},detach=True,network="kind")
 
 local_images={
     "ghcr.io/samerbahri98/mock-mlops-application-training:main":"localhost:5001/mock-mlops-application-training:main",

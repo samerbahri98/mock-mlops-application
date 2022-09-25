@@ -81,8 +81,22 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - portainer:/data
-
+  k8s-client:
+    image: alpine
+    container_name: k8s-client
+    volumes:
+      - ./kind/kubectl:/usr/local/bin/kubectl
+      - ./kind/k9s:/usr/local/bin/k9s
+      - ./_cache/docker.admin.conf:/root/.kube/admin.conf
+    command: tail -f /dev/null
+    environment:
+      KUBECONFIG: /root/.kube/admin.conf
 volumes:
   minio: {}
   percona: {}
   portainer: {}
+
+networks:
+  default:
+    external:
+      name: kind

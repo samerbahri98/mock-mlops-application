@@ -1,3 +1,3 @@
-./kind/kind delete cluster --name open-company
+./kind/kind delete cluster --name mock-mlops-cluster
 
 rm -rf _cache/admin.conf
