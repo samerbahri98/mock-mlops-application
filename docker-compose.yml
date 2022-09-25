@@ -42,6 +42,8 @@ services:
     restart: always
     depends_on:
       - db
+    expose:
+      - 8080
   keycloak:
     image: "quay.io/keycloak/keycloak:${KEYCLAOK_VERSION}"
     container_name: keycloak
@@ -56,11 +58,14 @@ services:
       PROXY_ADDRESS_FORWARDING: "true"
       REDIRECT_SOCKET: "proxy-http"
       KEYCLOAK_FRONTEND_URL: http://localhost/auth
+    expose:
+      - 8080
   nginx:
     image: "nginx:${NGINX_VERSION}"
     container_name: nginx
-    hostname: nginx
     restart: always
+    ports:
+      - 80:80
     volumes:
       - ./nginx:/etc/nginx/conf.d
     depends_on:
@@ -68,8 +73,6 @@ services:
       - adminer
       - minio
       - portainer
-    ports:
-      - 80:80
   portainer:
     image: portainer/portainer-ce:latest
     container_name: portainer
@@ -81,6 +84,11 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - portainer:/data
+    expose:
+      - 9000
+    networks:
+      - kind
+      - default
   k8s-client:
     image: alpine
     container_name: k8s-client
@@ -89,6 +97,9 @@ services:
       - ./kind/k9s:/usr/local/bin/k9s
       - ./_cache/docker.admin.conf:/root/.kube/admin.conf
     command: tail -f /dev/null
+    networks:
+      - kind
+      - default
     environment:
       KUBECONFIG: /root/.kube/admin.conf
 volumes:
@@ -96,7 +107,13 @@ volumes:
   percona: {}
   portainer: {}
 
+# networks:
+#   default:
+#     external:
+#       name: kind
 networks:
+  kind:
+    external: true
   default:
     external:
-      name: kind
+      name: mock-mlops-network

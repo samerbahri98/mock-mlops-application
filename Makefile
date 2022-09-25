@@ -3,6 +3,12 @@ export
 
 default: .up
 
+.network-up:
+	docker network create mock-mlops-network
+
+.network-down:
+	docker network remove mock-mlops-network
+
 .kind-up:
 	sh ./scripts/kind_up.sh
 
@@ -23,13 +29,19 @@ default: .up
 
 
 
-.up: .kind-download .kind-up .docker-up
+.up: .network-up .kind-download .kind-up .docker-up
 
 .PHONY: up
 up: .up
 
 .PHONY: down
-down: .kind-down .docker-down
+down: .kind-down .docker-down .network-down
+
+.PHONY: network-up
+network-up: .network-up
+
+.PHONY: network-down
+network-down: .network-down
 
 .PHONY: client
 client:

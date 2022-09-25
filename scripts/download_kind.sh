@@ -5,7 +5,7 @@ reset_cache(){
 
     rm -rf _cache/checksums.txt _cache/k9s.sha256sum _cache/k9s _cache/LICENSE _cache/README.md;
     
-    rm -rf _cache/helm-$HELM_VERSION-linux-amd64.tar.gz.sha256sum _cache/linux-amd64
+    # rm -rf _cache/helm-$HELM_VERSION-linux-amd64.tar.gz.sha256sum _cache/linux-amd64
 }
 
 reset_cache;
@@ -61,23 +61,24 @@ fi
 tar -xvf ./k9s_Linux_x86_64.tar.gz
 mv k9s ../kind/k9s
 
-# HELM3
+# # HELM3
 
-wget https://get.helm.sh/$HELM_VERSION-linux-amd64.tar.gz.sha256sum
+# wget https://get.helm.sh/$HELM_VERSION-linux-amd64.tar.gz.sha256sum
 
-if ! sha256sum -c k9s.sha256sum; then
-    wget https://get.helm.sh/helm-$HELM_VERSION-linux-amd64.tar.gz;
-    if ! sha256sum -c k9s.sha256sum ; then
-        echo "####ERROR####";
-        exit 1;
-    fi
-fi
-tar -xvf ./helm-$HELM_VERSION-linux-amd64.tar.gz
-mv ./linux-amd64/helm ../kind/helm
+# if ! sha256sum -c k9s.sha256sum; then
+#     wget https://get.helm.sh/helm-$HELM_VERSION-linux-amd64.tar.gz;
+#     if ! sha256sum -c k9s.sha256sum ; then
+#         echo "####ERROR####";
+#         exit 1;
+#     fi
+# fi
+# tar -xvf ./helm-$HELM_VERSION-linux-amd64.tar.gz
+# mv ./linux-amd64/helm ../kind/helm
 
 cd ../kind
 
-chmod +x ./kind ./kubectl ./k9s ./helm
+chmod +x ./kind ./kubectl ./k9s
+#  ./helm
 
 cd ../
 

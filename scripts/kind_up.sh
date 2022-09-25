@@ -11,4 +11,4 @@ python ./scripts/load_registry.py
 
 python ./scripts/generate_docker_kubeconfig.py
 
-# ./kind/kubectl apply -f ./k8s/manifests/portainer-agent.yml
+./kind/kubectl apply -f ./k8s/manifests/portainer-agent.yml
