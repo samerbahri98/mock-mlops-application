@@ -1,27 +1,6 @@
 ---
 version: '3'
 services:
-  minio:
-    image: "minio/minio:${MINIO_VERSION}"
-    container_name: minio
-    ports:
-      - 9000:9000
-      - 9001:9001
-    expose:
-      - 9000
-      - 9001
-    volumes:
-      - minio:/data
-    environment:
-      MINIO_ROOT_USER: ${MINIO_USERNAME}
-      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
-      MINIO_REGION_NAME: ${MINIO_REGION}
-    command: server --console-address ":9001" /data
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-      interval: 30s
-      timeout: 20s
-      retries: 3
   db:
     image: "percona:${PERCONA_VERSION}"
     container_name: db
@@ -35,6 +14,7 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
       - percona:/var/lib/mysql
+      - ./mysql:/docker-entrypoint-initdb.d
   adminer:
     image: "adminer:${ADMINER_VERSION}"
     container_name: adminer
@@ -71,8 +51,8 @@ services:
     depends_on:
       - keycloak
       - adminer
-      - minio
       - portainer
+      - logger-service
   portainer:
     image: portainer/portainer-ce:latest
     container_name: portainer
@@ -89,6 +69,22 @@ services:
     networks:
       - kind
       - default
+    command:
+      - --admin-password
+      - ${PORTAINER_PASSWORD_HASHED}
+  logger-service:
+    image: "python:${PYTHON_VERSION}"
+    container_name: logger-service
+    restart: always
+    volumes:
+      - ./service:/app
+    working_dir: /app
+    env_file:
+      - .env
+    command: sh entrypoint.sh
+    expose:
+      - 5000
+
   k8s-client:
     image: alpine
     container_name: k8s-client
@@ -102,8 +98,8 @@ services:
       - default
     environment:
       KUBECONFIG: /root/.kube/admin.conf
+
 volumes:
-  minio: {}
   percona: {}
   portainer: {}
 

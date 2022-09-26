@@ -2,3 +2,4 @@ _cache
 kind/*
 .ipynb_checkpoints
 !.gitkeep
+__pycache__
