@@ -52,7 +52,7 @@ services:
       - keycloak
       - adminer
       - portainer
-      - logger-service
+      - extra-services
   portainer:
     image: portainer/portainer-ce:latest
     container_name: portainer
@@ -72,16 +72,16 @@ services:
     command:
       - --admin-password
       - ${PORTAINER_PASSWORD_HASHED}
-  logger-service:
+  extra-services:
     image: "python:${PYTHON_VERSION}"
-    container_name: logger-service
+    container_name: extra-services
     restart: always
     volumes:
       - ./service:/app
     working_dir: /app
     env_file:
       - .env
-    command: sh entrypoint.sh
+    command: sh run.sh
     expose:
       - 5000
 

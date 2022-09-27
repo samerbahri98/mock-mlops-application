@@ -4,7 +4,7 @@ export
 default: .up
 
 .network-up:
-	docker network create mock-mlops-network
+	docker network ls | grep mock-mlops-network > /dev/null || docker network create mock-mlops-network
 
 .network-down:
 	docker network remove mock-mlops-network
@@ -42,6 +42,9 @@ network-up: .network-up
 
 .PHONY: network-down
 network-down: .network-down
+
+.PHONY: restart
+restart: down up
 
 .PHONY: client
 client:

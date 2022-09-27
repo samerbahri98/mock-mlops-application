@@ -22,6 +22,7 @@ def set(jwt):
                                 'Content-type': data.content_type
                             },
                             data=data)
-    if request.status_code != 200:
-        raise Exception(json.dumps(request.json()))
+    if request.status_code != 200 and request.status_code != 409:
+        #200: created / 409: conflict, means portainer already connected to k8s
+        raise Exception(json.dumps(request.json()),request.status_code)
     return
