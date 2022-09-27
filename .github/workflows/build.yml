@@ -1,5 +1,5 @@
 ---
-name: training
+name: build
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - id: meta
+      - id: meta-training
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ github.repository }}-training
@@ -31,6 +31,18 @@ jobs:
           context: training
           push: true
           tags: |
-            ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+            ${{ steps.meta-training.outputs.tags }}
+          labels: ${{ steps.meta-training.outputs.labels }}
           file: training/Dockerfile
+      - id: meta-extra-services
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}-extra-services
+      - uses: docker/build-push-action@v3
+        with:
+          context: training
+          push: true
+          tags: |
+            ${{ steps.meta-extra-services.outputs.tags }}
+          labels: ${{ steps.meta-extra-services.outputs.labels }}
+          file: service/Dockerfile
