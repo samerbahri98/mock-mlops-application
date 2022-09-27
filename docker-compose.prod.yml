@@ -73,8 +73,8 @@ services:
       - --admin-password
       - ${PORTAINER_PASSWORD_HASHED}
   extra-services:
-    image: |
-      "ghcr.io/samerbahri98/mock-mlops-application-extra-services:${BRANCH}"
+    image: "ghcr.io/samerbahri98/\
+      mock-mlops-application-extra-services:${BRANCH}"
     container_name: extra-services
     restart: always
     env_file:

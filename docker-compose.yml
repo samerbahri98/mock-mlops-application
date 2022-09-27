@@ -91,6 +91,8 @@ services:
     volumes:
       - ./kind/kubectl:/usr/local/bin/kubectl
       - ./kind/k9s:/usr/local/bin/k9s
+      - ./kind/helm:/usr/local/bin/helm
+      - ./k8s:/k8s
       - ./_cache/docker.admin.conf:/root/.kube/admin.conf
     command: tail -f /dev/null
     networks:
