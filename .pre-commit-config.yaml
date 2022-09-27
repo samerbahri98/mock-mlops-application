@@ -11,3 +11,11 @@ repos:
     hooks:
       - id: yamllint
         args: [-c=.yamllint]
+  - repo: local
+    hooks:
+      - id: yapf
+        name: yapf
+        language: python
+        entry: yapf
+        args: [-i, -vv]
+        types: [python]

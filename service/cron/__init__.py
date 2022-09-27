@@ -35,12 +35,3 @@ def job(jwt):
         logger_cursor.execute(sql, val)
         loggerdb.commit()
     return
-
-
-# def set():
-#     interval = os.getenv(
-#         "SCRAPE_INTERVAL") if "SCRAPE_INTERVAL" in os.environ else 10
-#     schedule.every(interval).seconds.do(job)
-#     while True:
-#         schedule.run_pending()
-#         time.sleep(1)

@@ -11,8 +11,6 @@ scheduler.add_job(func=job, trigger="interval", seconds=20)
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
 
-
-
 app.register_blueprint(api)
 
 if __name__ == '__main__':
