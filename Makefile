@@ -21,21 +21,36 @@ default: .up
 .docker-up:
 	docker compose up
 
+.docker-prod-up:
+	docker compose -f docker-compose.prod.yml up
+
+.docker-prod-upd:
+	docker compose -f docker-compose.prod.yml up -d
+
 .docker-upd:
 	docker compose up -d
 
 .docker-down:
 	docker compose down -v
 
-
+.docker-prod-down:
+	docker compose -f docker-compose.prod.yml down -v
 
 .up: .network-up .kind-download .kind-up .docker-up
+
+.prod-up: .network-up .kind-download .kind-up .docker-prod-up
 
 .PHONY: up
 up: .up
 
+.PHONY: prod-up
+prod-up: .prod-up
+
 .PHONY: down
 down: .kind-down .docker-down .network-down
+
+.PHONY: prod-down
+prod-down: .kind-down .docker-prod-down .network-down
 
 .PHONY: network-up
 network-up: .network-up

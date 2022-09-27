@@ -73,15 +73,12 @@ services:
       - --admin-password
       - ${PORTAINER_PASSWORD_HASHED}
   extra-services:
-    image: "python:${PYTHON_VERSION}"
+    image: |
+      "ghcr.io/samerbahri98/mock-mlops-application-extra-services:${BRANCH}"
     container_name: extra-services
     restart: always
-    volumes:
-      - ./service:/app
-    working_dir: /app
     env_file:
       - .env
-    command: sh run.sh
     expose:
       - 5000
 
