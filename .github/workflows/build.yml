@@ -40,7 +40,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ github.repository }}-extra-services
       - uses: docker/build-push-action@v3
         with:
-          context: training
+          context: service
           push: true
           tags: |
             ${{ steps.meta-extra-services.outputs.tags }}
