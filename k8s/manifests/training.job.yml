@@ -9,5 +9,6 @@ spec:
       containers:
         - name: traning
           image: ghcr.io/samerbahri98/mock-mlops-application-training:main
+          imagePullPolicy: IfNotPresent
       restartPolicy: Never
   backoffLimit: 4
