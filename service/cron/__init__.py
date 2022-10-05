@@ -11,13 +11,18 @@ from decorators import with_portainer
 
 @with_portainer
 def job(jwt):
-    logging.info(msg="job started")
+    if "PORTAINER_ID" not in os.environ:
+        logging.debug(msg="PORTAINER NOT SET")
+        return
+    logging.debug(msg="job started")
+    portainer_id = os.getenv("PORTAINER_ID")
+
     logger_cursor.execute(
         "select resourceVersion from logs order by resourceVersion limit 1")
     logger_cursor_results = logger_cursor.fetchall()
     resource_version = logger_cursor_results[0][0] if len(
         logger_cursor_results) == 1 else "0"
-    k8s_env_url = f"{os.getenv('PORTAINER_HOST')}/api/endpoints/1/kubernetes/api/v1/namespaces/trainings/pods?resourceVersion={resource_version}"
+    k8s_env_url = f"{os.getenv('PORTAINER_HOST')}/api/endpoints/{portainer_id}/kubernetes/api/v1/namespaces/trainings/pods?resourceVersion={resource_version}"
     request = requests.get(k8s_env_url,
                            headers={'Authorization': f'Bearer {jwt}'})
     if request.status_code != 200:

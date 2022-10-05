@@ -11,4 +11,8 @@ python ./scripts/load_registry.py
 
 python ./scripts/generate_docker_kubeconfig.py
 
+./kind/kind load docker-image portainer/agent:2.15.1 --name mock-mlops-cluster
+
+./kind/kind load docker-image ghcr.io/samerbahri98/mock-mlops-application-training:main --name mock-mlops-cluster
+
 ./kind/kubectl apply -f ./k8s/manifests/portainer-agent.yml
