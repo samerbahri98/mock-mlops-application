@@ -1,3 +1,6 @@
+--
+-- file: migrations/0001.init.sql
+--
 CREATE TABLE `logs` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `branch` text NOT NULL,

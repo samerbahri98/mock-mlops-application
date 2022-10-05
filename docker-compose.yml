@@ -14,7 +14,7 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
       - percona:/var/lib/mysql
-      - ./mysql:/docker-entrypoint-initdb.d
+      # - ./mysql:/docker-entrypoint-initdb.d
   adminer:
     image: "adminer:${ADMINER_VERSION}"
     container_name: adminer

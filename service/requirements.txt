@@ -1,5 +1,7 @@
 apscheduler
 Flask
 mysql-connector-python
+PyMySQL
 requests
 requests_toolbelt
+yoyo-migrations
