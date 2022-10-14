@@ -9,13 +9,14 @@ pipeline {
         string(name:'TAG',defaultValue:'main')
     }
     environment {
-        DOCKER_HOST="ssh://rundeck@thebahrimedia.com"
+        DOCKER_HOST=credentials('DOCKER_HOST')
     }
     stages{
         stage('build'){
             steps {
-                container('dind'){
+                container('build'){
                     sshagent (credentials: ['GITHUB-SSH']) {
+                        checkout scm
                         sh'''
 cat << EOF >> /etc/ssh/ssh_config
 UserKnownHostsFile /dev/null
