@@ -2,8 +2,13 @@
 name: build
 
 on:
-  push:
-    branches: [main]
+  pull_request:
+    branches:
+      - v*.*.*
+      - latest
+    tags:
+      - v*.*.*
+      - latest
 
 env:
   REGISTRY: ghcr.io

@@ -1,0 +1,13 @@
+---
+spec:
+  containers:
+    - name: dind
+      image: docker:dind
+      alwaysPullImage: true
+      privileged: true
+      ttyEnabled: true
+      dnsPolicy: Default
+      command:
+        - tail
+        - -f
+        - /dev/null
