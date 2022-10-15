@@ -39,20 +39,24 @@ EOF
         stage('pull-request'){
             steps{
                 container('curl'){
-                    httpRequest (
-                        consoleLogResponseBody: true,
-                        contentType: 'APPLICATION_JSON',
-                        httpMode: 'POST',
-                        requestBody: """
+                    withCredentials([
+                        usernamePassword(credentialsId: 'Github-PAT', passwordVariable: 'GITHUB_PAT')
+                    ]) {
+                        httpRequest (
+                            consoleLogResponseBody: true,
+                            contentType: 'APPLICATION_JSON',
+                            httpMode: 'POST',
+                            requestBody: """
                             {
                                 \"head\" : \"${params.BRANCH}\",
                                 \"base\" : \"main\"
                             }
                         """,
-                        url: ' https://api.github.com/repos/samerbahri98/mock-mlops-application/pulls',
-                        validResponseCodes: '201',
-                        customHeaders: [[name:'Authorization', value:"Bearer ${params.GITHUB_PAT}"]]
-                    )
+                            url: ' https://api.github.com/repos/samerbahri98/mock-mlops-application/pulls',
+                            validResponseCodes: '201',
+                            customHeaders: [[name:'Authorization', value:"Bearer $GITHUB_PAT"]]
+                        )
+                    }
                 }
             }
         }
@@ -62,6 +66,6 @@ EOF
     }
     environment {
         GITCONFIG=credentials('GITCONFIG')
-        GITHUB_PAT=credentials('Github-PAT')
+
     }
 }
