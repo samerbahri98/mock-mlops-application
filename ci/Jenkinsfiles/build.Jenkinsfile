@@ -14,7 +14,7 @@ pipeline {
     stages{
         stage('build'){
             steps {
-                container('build'){
+                container('dind'){
                     sshagent (credentials: ['GITHUB-SSH']) {
                         checkout scm
                         sh'''
