@@ -11,21 +11,21 @@ pipeline {
                     sshagent (credentials: ['GITHUB-SSH']) {
                         sh "ln -s $GITCONFIG ~/.gitconfig"
                         checkout scm
-                        sh '''
+                        sh """
                             cat << EOF > service/migrations/0002.branch.sql
                             --
                             -- file: migrations/0002.branch.sql
                             --
                             ALTER TABLE `logs` ALTER `branch` SET DEFAULT '${params.BRANCH}';
                             EOF
-                        '''
-                        sh '''
+                        """
+                        sh """
                             git branch ${BRANCH}
                             git checkout ${BRANCH}
                             git add service/migrations/0002.branch.sql
                             git commit -m "${params.BRANCH} fix: branch default"
                             git push -u origin ${params.BRANCH}
-                        '''
+                        """
                     }
                 }
             }
