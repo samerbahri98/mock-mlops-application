@@ -19,13 +19,14 @@ pipeline {
                             ALTER TABLE `logs` ALTER `branch` SET DEFAULT '${params.BRANCH}';
                             EOF
                         """
-                        sh'''
+                        sh"""
                             cat << EOF >> /etc/ssh/ssh_config
                             UserKnownHostsFile /dev/null
                             StrictHostKeyChecking OFF
                             EOF
-                        '''
+                        """
                         sh """
+                            git remote add origin git@github.com:samerbahri98/mock-mlops-application.git
                             git branch ${BRANCH}
                             git checkout ${BRANCH}
                             git add service/migrations/0002.branch.sql
@@ -62,7 +63,7 @@ pipeline {
         }
     }
     parameters {
-        string(name:'BRANCH',defaultValue:'main')
+        string(name:'BRANCH',defaultValue:'dev')
     }
     environment {
         GITCONFIG=credentials('GITCONFIG')
