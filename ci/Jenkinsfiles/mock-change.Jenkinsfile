@@ -45,8 +45,8 @@ EOF
                         httpMode: 'POST',
                         requestBody: """
                             {
-                                \"head\" : \"${params.BRANCH}\",
-                                \"base\" : \"main\"
+                                "head" : "${params.BRANCH}",
+                                "base" : "main"
                             }
                         """,
                         url: 'https://api.github.com/repos/samerbahri98/mock-mlops-application/pulls',
