@@ -39,15 +39,20 @@ EOF
         stage('pull-request'){
             steps{
                 container('curl'){
-
-                    sh """
-                    curl \
-                    -X POST \
-                    -H "Accept: application/vnd.github+json" \
-                    -H "Authorization: Bearer $GITHUB_PAT_PSW" \
-                    https://api.github.com/repos/samerbahri98/mock-mlops-application/pulls \
-                    -d '{"head":"${params.BRANCH}","base":"main"}'
-                    """
+                    httpRequest (
+                        consoleLogResponseBody: true,
+                        contentType: 'APPLICATION_JSON',
+                        httpMode: 'POST',
+                        requestBody: """
+                            {
+                                \"head\" : \"${params.BRANCH}\",
+                                \"base\" : \"main\"
+                            }
+                        """,
+                        url: 'https://api.github.com/repos/samerbahri98/mock-mlops-application/pulls',
+                        validResponseCodes: '201',
+                        customHeaders: [[name:'Authorization', value:"Bearer $GITHUB_PAT_PSW"]]
+                    )
                 }
             }
         }
