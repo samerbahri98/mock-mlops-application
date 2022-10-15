@@ -26,7 +26,6 @@ pipeline {
                             EOF
                         """
                         sh """
-                            git remote add origin git@github.com:samerbahri98/mock-mlops-application.git
                             git branch ${BRANCH}
                             git checkout ${BRANCH}
                             git add service/migrations/0002.branch.sql
