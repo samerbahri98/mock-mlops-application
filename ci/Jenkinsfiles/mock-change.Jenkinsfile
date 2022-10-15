@@ -45,6 +45,7 @@ EOF
                         httpMode: 'POST',
                         requestBody: """
                             {
+                                "title" : "${params.BRANCH} -> main",
                                 "head" : "${params.BRANCH}",
                                 "base" : "main"
                             }
