@@ -40,7 +40,7 @@ EOF
             steps{
                 container('curl'){
                     withCredentials([
-                        usernamePassword(credentialsId: 'Github-PAT', passwordVariable: 'GITHUB_PAT')
+                        usernamePassword(credentialsId: 'Github-PAT', passwordVariableName: 'GITHUB_PAT')
                     ]) {
                         httpRequest (
                             consoleLogResponseBody: true,
@@ -51,7 +51,7 @@ EOF
                                 \"head\" : \"${params.BRANCH}\",
                                 \"base\" : \"main\"
                             }
-                        """,
+                            """,
                             url: ' https://api.github.com/repos/samerbahri98/mock-mlops-application/pulls',
                             validResponseCodes: '201',
                             customHeaders: [[name:'Authorization', value:"Bearer $GITHUB_PAT"]]
