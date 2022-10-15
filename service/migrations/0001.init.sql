@@ -3,9 +3,9 @@
 --
 CREATE TABLE `logs` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `branch` text NOT NULL,
-  `name` text NOT NULL,
-  `resourceVersion` text NOT NULL,
-  `state` text NOT NULL,
+  `branch` varchar(50) NOT NULL DEFAULT 'main',
+  `name` varchar(50) NOT NULL,
+  `resourceVersion` varchar(50) NOT NULL,
+  `state` varchar(50) NOT NULL,
   `created_at` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

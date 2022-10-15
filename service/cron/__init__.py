@@ -30,13 +30,12 @@ def job(jwt):
     response = request.json()
     if response["metadata"]["resourceVersion"] == resource_version:
         return
-    branch = os.getenv("BRANCH") if "BRANCH" in os.environ else "main"
     resource_version = response["metadata"]["resourceVersion"]
     for pod in response["items"]:
         name = pod["metadata"]["name"]
         state = pod["status"]["phase"]
-        sql, val = "insert into logs (branch,name,resourceVersion,state) values (%s,%s,%s,%s)", (
-            branch, name, resource_version, state)
+        sql, val = "insert into logs (name,resourceVersion,state) values (%s,%s,%s,%s)", (
+            name, resource_version, state)
         logger_cursor.execute(sql, val)
         loggerdb.commit()
     return

@@ -1,8 +1,8 @@
 ---
 spec:
   containers:
-    - name: git
-      image: alpine/git:v2.30.0-amd64
+    - name: dind
+      image: docker:git
       alwaysPullImage: true
       privileged: true
       ttyEnabled: true
@@ -11,8 +11,8 @@ spec:
         - tail
         - -f
         - /dev/null
-    - name: dind
-      image: docker:dind
+    - name: curl
+      image: curlimages/curl:7.85.0
       alwaysPullImage: true
       privileged: true
       ttyEnabled: true
