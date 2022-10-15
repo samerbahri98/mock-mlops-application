@@ -21,12 +21,12 @@ pipeline {
                 container('dind'){
                     sshagent (credentials: ['GITHUB-SSH']) {
                         checkout scm
-                        sh'''
+                        sh"""
 cat << EOF >> /etc/ssh/ssh_config
 UserKnownHostsFile /dev/null
 StrictHostKeyChecking OFF
 EOF
-                        '''
+                        """
                     }
                 }
             }

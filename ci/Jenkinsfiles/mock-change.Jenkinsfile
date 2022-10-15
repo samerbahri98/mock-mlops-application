@@ -12,18 +12,18 @@ pipeline {
                         sh "ln -s $GITCONFIG ~/.gitconfig"
                         checkout scm
                         sh """
-                            cat << EOF > service/migrations/0002.branch.sql
-                            --
-                            -- file: migrations/0002.branch.sql
-                            --
-                            ALTER TABLE `logs` ALTER `branch` SET DEFAULT '${params.BRANCH}';
-                            EOF
+cat << EOF > service/migrations/0002.branch.sql
+--
+-- file: migrations/0002.branch.sql
+--
+ALTER TABLE `logs` ALTER `branch` SET DEFAULT '${params.BRANCH}';
+EOF
                         """
                         sh"""
-                            cat << EOF >> /etc/ssh/ssh_config
-                            UserKnownHostsFile /dev/null
-                            StrictHostKeyChecking OFF
-                            EOF
+cat << EOF >> /etc/ssh/ssh_config
+UserKnownHostsFile /dev/null
+StrictHostKeyChecking OFF
+EOF
                         """
                         sh """
                             git branch ${BRANCH}
