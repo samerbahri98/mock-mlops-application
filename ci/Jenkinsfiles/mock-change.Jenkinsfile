@@ -52,7 +52,7 @@ EOF
                                 \"base\" : \"main\"
                             }
                             """,
-                            url: ' https://api.github.com/repos/samerbahri98/mock-mlops-application/pulls',
+                            url: 'https://api.github.com/repos/samerbahri98/mock-mlops-application/pulls',
                             validResponseCodes: '201',
                             customHeaders: [[name:'Authorization', value:'Bearer $GITHUB_PAT']]
                         )
