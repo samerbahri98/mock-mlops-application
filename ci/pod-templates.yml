@@ -1,6 +1,16 @@
 ---
 spec:
   containers:
+    - name: git
+      image: alpine/git:v2.30.0-amd64
+      alwaysPullImage: true
+      privileged: true
+      ttyEnabled: true
+      dnsPolicy: Default
+      command:
+        - tail
+        - -f
+        - /dev/null
     - name: dind
       image: docker:dind
       alwaysPullImage: true

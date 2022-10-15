@@ -1,12 +1,16 @@
 pipeline {
     agent {
         kubernetes {
-            yamlFile 'ci/pod-templates/dind.pod-template.yml'
+            yamlFile 'ci/pod-templates.yml'
         }
     }
     parameters {
         string(name:'IMAGE',defaultValue:'training')
-        string(name:'TAG',defaultValue:'main')
+        string(name:'TAG',defaultValue:'misc')
+        string(name:'BRANCH',defaultValue:'main')
+        string(name:'CONTEXT',defaultValue:'.')
+        string(name:'DOCKERFILE',defaultValue:'.')
+        string(name:'REPO',defaultValue:'mock-mlops-application')
     }
     environment {
         DOCKER_HOST=credentials('DOCKER_HOST')
@@ -23,7 +27,6 @@ UserKnownHostsFile /dev/null
 StrictHostKeyChecking OFF
 EOF
                         '''
-                        sh "docker image ls"
                     }
                 }
             }
