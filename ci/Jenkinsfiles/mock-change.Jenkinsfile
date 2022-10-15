@@ -19,6 +19,12 @@ pipeline {
                             ALTER TABLE `logs` ALTER `branch` SET DEFAULT '${params.BRANCH}';
                             EOF
                         """
+                        sh'''
+                            cat << EOF >> /etc/ssh/ssh_config
+                            UserKnownHostsFile /dev/null
+                            StrictHostKeyChecking OFF
+                            EOF
+                        '''
                         sh """
                             git branch ${BRANCH}
                             git checkout ${BRANCH}
