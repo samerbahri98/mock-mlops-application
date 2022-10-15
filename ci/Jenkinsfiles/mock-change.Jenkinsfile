@@ -16,7 +16,7 @@ cat << EOF > service/migrations/0002.branch.sql
 --
 -- file: migrations/0002.branch.sql
 --
-ALTER TABLE `logs` ALTER `branch` SET DEFAULT '${params.BRANCH}';
+ALTER TABLE logs ALTER branch SET DEFAULT '${params.BRANCH}';
 EOF
                         """
                         sh"""
@@ -26,8 +26,8 @@ StrictHostKeyChecking OFF
 EOF
                         """
                         sh """
-                            git branch ${BRANCH}
-                            git checkout ${BRANCH}
+                            git branch ${params.BRANCH}
+                            git checkout ${params.BRANCH}
                             git add service/migrations/0002.branch.sql
                             git commit -m "${params.BRANCH} fix: branch default"
                             git push -u origin ${params.BRANCH}
@@ -48,7 +48,7 @@ EOF
                             httpMode: 'POST',
                             requestBody: """
                             {
-                                \"head\" : \"${BRANCH}\",
+                                \"head\" : \"${params.BRANCH}\",
                                 \"base\" : \"main\"
                             }
                         """,
