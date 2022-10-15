@@ -39,18 +39,15 @@ EOF
         stage('pull-request'){
             steps{
                 container('curl'){
-                    withCredentials([
-                        usernamePassword(credentialsId: 'Github-PAT', passwordVariable: 'GITHUB_PAT')
-                    ]) {
-                        sh """
-                        curl \
-                        -X POST \
-                        -H "Accept: application/vnd.github+json" \
-                        -H "Authorization: Bearer $GITHUB_PAT" \
-                        https://api.github.com/repos/samerbahri98/mock-mlops-application/pulls \
-                        -d '{"head":"${params.BRANCH}","base":"main"}'
-                        """
-                    }
+
+                    sh """
+                    curl \
+                    -X POST \
+                    -H "Accept: application/vnd.github+json" \
+                    -H "Authorization: Bearer $GITHUB_PAT_PSW" \
+                    https://api.github.com/repos/samerbahri98/mock-mlops-application/pulls \
+                    -d '{"head":"${params.BRANCH}","base":"main"}'
+                    """
                 }
             }
         }
@@ -60,6 +57,6 @@ EOF
     }
     environment {
         GITCONFIG=credentials('GITCONFIG')
-
+        GITHUB_PAT=credentials('Github-PAT')
     }
 }
