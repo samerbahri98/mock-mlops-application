@@ -36,21 +36,19 @@ pipeline {
                     withCredentials([
                         usernamePassword(credentialsId: 'Github-PAT', passwordVariable: 'GITHUB_PAT')
                     ]) {
-                        def command = """
-                            {
-                                \"head\" : \"${BRANCH}\",
-                                \"base\" : \"main\"
-                            }
-                        """
-                        def customHeaders = [[name:'Authorization', value:"Bearer ${GITHUB_PAT}"]]
                         httpRequest (
                             consoleLogResponseBody: true,
                             contentType: 'APPLICATION_JSON',
                             httpMode: 'POST',
-                            requestBody: command,
+                            requestBody: """
+                            {
+                                \"head\" : \"${BRANCH}\",
+                                \"base\" : \"main\"
+                            }
+                        """,
                             url: ' https://api.github.com/repos/samerbahri98/mock-mlops-application/pulls',
                             validResponseCodes: '201',
-                            customHeaders: customHeaders
+                            customHeaders: [[name:'Authorization', value:"Bearer ${GITHUB_PAT}"]]
                         )
                     }
                 }
