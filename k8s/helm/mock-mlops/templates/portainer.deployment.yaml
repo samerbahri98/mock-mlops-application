@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mock-mlops.fullname" . }}-portainer
+  labels:
+    {{- include "mock-mlops.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "mock-mlops.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.portainer.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "mock-mlops.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.portainer.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "mock-mlops.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.portainer.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.portainer.securityContext | nindent 12 }}
+          image: "{{ .Values.portainer.image.repository }}:{{ .Values.portainer.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.portainer.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 9000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          args:
+            - "--admin-password-file=/tmp/portainerPassword"
+          volumeMounts:
+            - mountPath: /tmp/portainerPassword
+              subPath: portainerPassword
+              name: portainer-password
+              readOnly: true
+          resources:
+            {{- toYaml .Values.portainer.resources | nindent 12 }}
+      volumes:
+        - name: portainer-password
+          secret:
+            secretName: {{ include "mock-mlops.fullname" . }}
+            items:
+              - key: portainerPassword
+                path: portainerPassword
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
