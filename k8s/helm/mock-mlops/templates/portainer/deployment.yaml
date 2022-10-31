@@ -28,10 +28,10 @@ spec:
       securityContext:
         {{- toYaml .Values.portainer.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ include "mock-mlops.fullname" . }}-portainer
           securityContext:
             {{- toYaml .Values.portainer.securityContext | nindent 12 }}
-          image: "{{ .Values.portainer.image.repository }}:{{ .Values.portainer.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.portainer.image.repository }}:{{ .Values.portainer.image.tag }}"
           imagePullPolicy: {{ .Values.portainer.image.pullPolicy }}
           ports:
             - name: http

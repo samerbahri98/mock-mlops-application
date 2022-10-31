@@ -9,14 +9,18 @@ default: .up
 .network-down:
 	docker network remove mock-mlops-network
 
+
 .kind-up:
 	sh ./scripts/kind_up.sh
 
-.kind-download:
-	sh ./scripts/download_kind.sh
+.PHONY: kind-up
+kind-up: .kind-up
 
 .kind-down:
 	sh ./scripts/kind_down.sh
+
+.PHONY: kind-download
+kind-download: .kind-download
 
 .docker-up:
 	docker compose up

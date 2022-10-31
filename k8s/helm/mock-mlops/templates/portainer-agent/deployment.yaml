@@ -1,0 +1,37 @@
+{{- if .Values.agent.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mock-mlops.fullname" . }}-portainer-agent
+  labels:
+    {{- include "mock-mlops.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "mock-mlops.fullname" . }}-portainer-agent
+  template:
+    metadata:
+      labels:
+        app: {{ include "mock-mlops.fullname" . }}-portainer-agent
+    spec:
+      serviceAccountName: {{ include "mock-mlops.fullname" . }}-portainer-agent
+      containers:
+        - name: {{ include "mock-mlops.fullname" . }}-portainer-agent
+          image: "{{ .Values.agent.image.repository }}:{{ .Values.agent.image.tag }}"
+          imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.portainer.securityContext | nindent 12 }}
+          env:
+            - name: LOG_LEVEL
+              value: DEBUG
+            - name: AGENT_CLUSTER_ADDR
+              value: {{ include "mock-mlops.fullname" . }}-portainer-agent
+            - name: KUBERNETES_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          ports:
+            - containerPort: {{ .Values.agent.port }}
+              protocol: TCP
+
+{{- end }}
