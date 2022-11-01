@@ -13,37 +13,37 @@ spec:
       {{- include "mock-mlops.extra.labels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.portainer.podAnnotations }}
+      {{- with .Values.extra.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "mock-mlops.extra.labels" . | nindent 8 }}
     spec:
-      {{- with .Values.portainer.imagePullSecrets }}
+      {{- with .Values.extra.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "mock-mlops.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.portainer.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.extra.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ include "mock-mlops.fullname" . }}-extra
           securityContext:
-            {{- toYaml .Values.portainer.securityContext | nindent 12 }}
+            {{- toYaml .Values.extra.securityContext | nindent 12 }}
           image: "{{ .Values.extra.image.repository }}:{{ .Values.extra.image.tag }}"
-          imagePullPolicy: {{ .Values.portainer.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.extra.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.extra.service.port }}
+              containerPort: 5000
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /health
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /health
               port: http
           env:
             - name: "MYSQL_HOST"
