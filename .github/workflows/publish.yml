@@ -1,5 +1,5 @@
 ---
-name: build-chart
+name: publish chart
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: build training
+    name: publish chart
     steps:
       - uses: actions/checkout@v3
       - uses: azure/setup-helm@v3
