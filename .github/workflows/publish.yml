@@ -24,7 +24,7 @@ jobs:
           helm repo-html
           mkdir out
           mv index.yaml out
-          mv index.html
+          mv index.html out
           mv *.tgz out
         working-directory: ./k8s/helm
       - name: Publish helm chart
