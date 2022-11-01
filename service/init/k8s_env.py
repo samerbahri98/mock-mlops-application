@@ -6,11 +6,12 @@ from requests_toolbelt import MultipartEncoder
 
 def set(jwt):
     k8s_env_url = f"{os.getenv('PORTAINER_HOST')}/api/endpoints"
+    portainer_agent = f"tcp://{os.getenv('PORTAINER_AGENT_HOST')}"
     data = MultipartEncoder(
         fields={
             'Name': 'kind',
             'EndpointCreationType': "2",
-            'URL': 'tcp://mock-mlops-cluster-control-plane:30080',
+            'URL': portainer_agent,
             'GroupID': "1",
             'TLS': "true",
             'TLSSkipVerify': "true",
