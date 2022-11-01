@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "mock-mlops.fullname" . }}-healthcheck"
+  labels:
+    {{- include "mock-mlops.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox:stable-uclibc
+      command: ['wget']
+      args: 
+        - -o-
+        - --header='Content-Type:application/json' 
+        - 'http://{{ include "mock-mlops.fullname" . }}-extra:{{ .Values.extra.service.port }}/health'
+  restartPolicy: Never

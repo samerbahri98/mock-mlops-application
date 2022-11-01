@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mock-mlops.fullname" . }}-extra
+  labels:
+    {{- include "mock-mlops.extra.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.extra.service.type }}
+  ports:
+    - port: {{ .Values.extra.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "mock-mlops.extra.labels" . | nindent 4 }}

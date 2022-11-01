@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ include "mock-mlops.fullname" . }}-portainer
   labels:
-    {{- include "mock-mlops.labels" . | nindent 4 }}
+    {{- include "mock-mlops.portainer.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.portainer.service.type }}
   ports:
@@ -12,4 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "mock-mlops.selectorLabels" . | nindent 4 }}
+    {{- include "mock-mlops.portainer.labels" . | nindent 4 }}

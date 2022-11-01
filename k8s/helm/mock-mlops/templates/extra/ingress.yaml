@@ -16,9 +16,9 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: {{ $fullName }}-portainer
+  name: {{ $fullName }}-extra
   labels:
-    {{- include "mock-mlops.portainer.labels" . | nindent 4 }}
+    {{- include "mock-mlops.extra.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -38,7 +38,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    - host: {{ include "portainer-hostname" . | quote }}
+    - host: {{ include "extra-hostname" . | quote }}
       http:
         paths:
           {{- range .Values.ingress.paths }}
@@ -49,11 +49,11 @@ spec:
             backend:
               {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
               service:
-                name: {{ $fullName }}-portainer
+                name: {{ $fullName }}-extra
                 port:
                   number: {{ $svcPort }}
               {{- else }}
-              serviceName: {{ $fullName }}-portainer
+              serviceName: {{ $fullName }}-extra
               servicePort: {{ $svcPort }}
               {{- end }}
           {{- end }}

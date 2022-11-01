@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mock-mlops.fullname" . }}-extra
+  labels:
+    {{- include "mock-mlops.extra.labels" . | nindent 4 }}
+data:
+  well_known.json:
+    "{
+      \"token_endpoint\":
+      \"{{ .Values.keycloak.vars.host }}/auth/realms\
+      /{{ .Values.keycloak.vars.realm }}/protocol/openid-connect/token\",
+	    \"authorization_endpoint\": 
+      \"{{ .Values.keycloak.vars.host }}/auth/realms\
+      /{{ .Values.keycloak.vars.realm }}/protocol/openid-connect/auth\",
+      \"end_session_endpoint\":
+      \"{{ .Values.keycloak.vars.host }}/auth/realms\
+      /{{ .Values.keycloak.vars.realm }}/protocol/openid-connect/logout\",
+      \"userinfo_endpoint\":
+      \"{{ .Values.keycloak.vars.host }}/auth/realms\
+      /{{ .Values.keycloak.vars.realm }}/protocol/openid-connect/userinfo\"
+    }"

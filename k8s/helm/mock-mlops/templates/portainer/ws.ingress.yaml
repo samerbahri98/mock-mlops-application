@@ -17,7 +17,7 @@ kind: Ingress
 metadata:
   name: {{ $fullName }}-portainer-ws
   labels:
-    {{- include "mock-mlops.labels" . | nindent 4 }}
+    {{- include "mock-mlops.portainer.labels" . | nindent 4 }}
   {{- with .Values.ingress.ws.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

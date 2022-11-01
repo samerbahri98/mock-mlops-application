@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mock-mlops.fullname" . }}-extra
+  labels:
+    {{- include "mock-mlops.extra.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "mock-mlops.extra.labels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.portainer.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "mock-mlops.extra.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.portainer.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "mock-mlops.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.portainer.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ include "mock-mlops.fullname" . }}-extra
+          securityContext:
+            {{- toYaml .Values.portainer.securityContext | nindent 12 }}
+          image: "{{ .Values.extra.image.repository }}:{{ .Values.extra.image.tag }}"
+          imagePullPolicy: {{ .Values.portainer.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.extra.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          env:
+            - name: "MYSQL_HOST"
+              value: {{ .Values.mysql.vars.host }}
+            - name: "MYSQL_USER"
+              value: {{ .Values.mysql.vars.username }}
+            - name: "MYSQL_DATABASE"
+              value: {{ .Values.mysql.vars.db }}
+            - name: "MYSQL_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  key: "mysqlPassword"
+                  name: {{ include "mock-mlops.fullname" . }}
+            - name: PORTAINER_HOST
+              value: http://{{ include "mock-mlops.fullname" . }}-portainer:{{ .Values.portainer.service.port }}
+            - name: PORTAINER_USER
+              value: admin
+            - name: PORTAINER_AGENT_HOST
+              value: {{ include "mock-mlops.fullname" . }}-portainer-agent:{{ .Values.agent.port }}
+            - name: "PORTAINER_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  key: "portainerPassword"
+                  name: {{ include "mock-mlops.fullname" . }}
+            - name: "CLIENT_ID"
+              valueFrom:
+                secretKeyRef:
+                  key: "clientID"
+                  name: {{ include "mock-mlops.fullname" . }}
+            - name: "CLIENT_SECRET"
+              valueFrom:
+                secretKeyRef:
+                  key: "clientSecret"
+                  name: {{ include "mock-mlops.fullname" . }}
+          volumeMounts:
+            - mountPath: /app/keycloak
+              name: keycloak-configmap
+              readOnly: true
+          resources:
+            {{- toYaml .Values.extra.resources | nindent 12 }}
+      volumes:
+        - name: keycloak-configmap
+          configMap:
+            name: {{ include "mock-mlops.fullname" . }}-extra
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
