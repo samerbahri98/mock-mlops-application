@@ -2,20 +2,6 @@
 name: build
 
 on:
-  push:
-    branches:
-      - v*.*.*
-      - main
-    tags:
-      - v*.*.*
-      - main
-  pull_request:
-    branches:
-      - v*.*.*
-      - main
-    tags:
-      - v*.*.*
-      - main
   workflow_dispatch:
 
 env:
@@ -35,15 +21,15 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - id: meta-extra-services
+      - id: meta-training
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ github.repository }}-extra-services
+          images: ${{ env.REGISTRY }}/${{ github.repository }}-training
       - uses: docker/build-push-action@v3
         with:
-          context: service
+          context: training
           push: true
           tags: |
-            ${{ steps.meta-extra-services.outputs.tags }}
-          labels: ${{ steps.meta-extra-services.outputs.labels }}
-          file: service/Dockerfile
+            ${{ steps.meta-training.outputs.tags }}
+          labels: ${{ steps.meta-training.outputs.labels }}
+          file: training/Dockerfile

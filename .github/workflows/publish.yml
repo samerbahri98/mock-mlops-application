@@ -1,0 +1,35 @@
+---
+name: build-chart
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: build training
+    steps:
+      - uses: actions/checkout@v3
+      - uses: azure/setup-helm@v3
+      - name: helm html plugin
+        run:
+          helm plugin install https://github.com/halkeye/helm-repo-html
+      - name: Package Chart
+        run: |
+          helm package mock-mlops
+          helm repo index --merge index.yaml .
+          helm repo-html
+          mkdir out
+          mv index.yaml out
+          mv index.html
+          mv *.tgz out
+        working-directory: ./k8s/helm
+      - name: Publish helm chart
+        uses: JamesIves/github-pages-deploy-action@v4  # 4.1.4
+        with:
+          branch: gh-pages
+          folder: k8s/helm/out
+          single-commit: true
