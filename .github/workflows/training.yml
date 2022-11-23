@@ -1,5 +1,5 @@
 ---
-name: build
+name: build training
 
 on:
   workflow_dispatch:

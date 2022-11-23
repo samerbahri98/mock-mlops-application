@@ -24,7 +24,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: build training
+    name: build extra
     steps:
       - uses: actions/checkout@v3
       - uses: hadolint/hadolint-action@v2.0.0
